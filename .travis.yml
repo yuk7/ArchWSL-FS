@@ -56,4 +56,4 @@ deploy:
     repo: yuk7/ArchWSL-FS
     tags: true
     all_branches: true
-skip_cleanup: true
+  skip_cleanup: true
