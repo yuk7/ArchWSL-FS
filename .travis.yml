@@ -29,7 +29,7 @@ script:
 - sudo rm -rf ./etc/mtab
 - echo "rootfs / rootfs rw 0 0" | sudo tee ./etc/mtab
 - sudo chroot . /usr/bin/locale-gen
-- yes | sudo chroot . /usr/bin/pacman -U --force /root/${FRTCP_FN}
+- yes | sudo chroot . /usr/bin/pacman -U /root/${FRTCP_FN}
 - yes | sudo chroot . /usr/bin/pacman -Scc
 - 
 - sudo umount ./{sys,proc}
