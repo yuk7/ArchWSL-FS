@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ARCH="x86_64"
-ROOTFS_VER="2019.11.01"
+ROOTFS_VER="2020.02.01"
 ROOTFS_FN="archlinux-bootstrap-${ROOTFS_VER}-${ARCH}.tar.gz"
 ROOTFS_URL="http://mirrors.kernel.org/archlinux/iso/${ROOTFS_VER}/${ROOTFS_FN}"
 
@@ -10,7 +10,7 @@ FRTCP_VER="1.23-1"
 FRTCP_FN="fakeroot-tcp-${FRTCP_VER}-${ARCH}.pkg.tar.xz"
 FRTCP_URL="https://github.com/yuk7/arch-prebuilt/releases/download/${FRTCP_BLD}/${FRTCP_FN}"
 
-PAC_PKGS="bzip2 coreutils diffutils gawk gcc-libs gettext grep gzip inetutils iproute2 iputils less man-db man-pages nano sed sudo tar vi vim wget which"
+PAC_PKGS="zbzip2 coreutils diffutils gawk gcc-libs gettext grep gzip inetutils iproute2 iputils less man-db man-pages nano sed sudo tar vi vim wget which"
 
 if type curl >/dev/null 2>&1 ;then
     DLR="curl"
