@@ -10,7 +10,7 @@ FRTCP_VER="1.23-1"
 FRTCP_FN="fakeroot-tcp-${FRTCP_VER}-${ARCH}.pkg.tar.xz"
 FRTCP_URL="https://github.com/yuk7/arch-prebuilt/releases/download/${FRTCP_BLD}/${FRTCP_FN}"
 
-PAC_PKGS="zbzip2 coreutils diffutils gawk gcc-libs gettext grep gzip inetutils iproute2 iputils less man-db man-pages nano sed sudo tar vi vim wget which"
+PAC_PKGS="base less nano sudo vim curl"
 
 if type curl >/dev/null 2>&1 ;then
     DLR="curl"
