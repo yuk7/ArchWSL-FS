@@ -1,0 +1,23 @@
+name: Continuous Deployment
+
+on:
+  push:
+    tags:
+      - '*'
+  
+jobs:
+  publish-github:
+    name: Publish on Github
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: |
+          make
+      - name: Upload the release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            rootfs.tar.gz
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
