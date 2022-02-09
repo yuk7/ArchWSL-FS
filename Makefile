@@ -2,7 +2,7 @@ OUT_TGZ=rootfs.tar.gz
 
 DLR=curl
 DLR_FLAGS=-L
-BASE_URL=http://mirrors.edge.kernel.org/archlinux/iso/2021.08.01/archlinux-bootstrap-2021.08.01-x86_64.tar.gz
+BASE_URL=http://mirrors.edge.kernel.org/archlinux/iso/2022.02.01/archlinux-bootstrap-2022.02.01-x86_64.tar.gz
 FRTCP_URL=https://github.com/yuk7/arch-prebuilt/releases/download/21082800/fakeroot-tcp-1.25.3-2-x86_64.pkg.tar.zst
 GLIBC_URL=https://github.com/yuk7/arch-prebuilt/releases/download/21082800/glibc-2.33-5-x86_64.pkg.tar.zst
 PAC_PKGS=base less nano sudo vim curl
