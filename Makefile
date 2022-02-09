@@ -12,7 +12,7 @@ all: $(OUT_TGZ)
 tgz: $(OUT_TGZ)
 $(OUT_TGZ): rootfinal.tmp
 	@echo -e '\e[1;31mBuilding $(OUT_TGZ)\e[m'
-	cd root.x86_64; sudo tar -zcpf ../$(OUT_TGZ) *
+	cd root.x86_64; sudo tar --xattrs --xattrs-include="security.capability" -zcpf ../$(OUT_TGZ) *
 	sudo chown `id -un` $(OUT_TGZ)
 
 rootfinal.tmp: glibc.tmp fakeroot.tmp locale.tmp
@@ -46,7 +46,9 @@ glibc.tmp: proc-tmp.tmp pacpkgs.tmp glibc.pkg.tar.zst
 pacpkgs.tmp: proc-tmp.tmp resolv-tmp.tmp mirrorlist-tmp.tmp paccnf-tmp.tmp
 	@echo -e '\e[1;31mInstalling basic packages...\e[m'
 	sudo chroot root.x86_64 /usr/bin/pacman -Syu --noconfirm $(PAC_PKGS)
-	sudo chmod u+s root.x86_64/usr/bin/ping
+	sudo mkdir -p root.x86_64/etc/pacman.d/hooks
+	sudo cp -f setcap-iputils.hook root.x86_64/etc/pacman.d/hooks/50-setcap-iputils.hook
+	sudo setcap cap_net_raw+p root.x86_64/usr/bin/ping
 	touch pacpkgs.tmp
 
 locale.tmp: proc-tmp.tmp pacpkgs.tmp
@@ -78,7 +80,7 @@ proc-tmp.tmp: root.x86_64.tmp
 
 root.x86_64.tmp: base.tar.gz
 	@echo -e '\e[1;31mExtracting rootfs...\e[m'
-	sudo tar -zxpf base.tar.gz
+	sudo tar --xattrs --xattrs-include="security.capability" -zxpf base.tar.gz
 	sudo chmod +x root.x86_64
 	touch root.x86_64.tmp
 
