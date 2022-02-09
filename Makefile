@@ -12,7 +12,7 @@ all: $(OUT_TGZ)
 tgz: $(OUT_TGZ)
 $(OUT_TGZ): rootfinal.tmp
 	@echo -e '\e[1;31mBuilding $(OUT_TGZ)\e[m'
-	cd root.x86_64; sudo tar --xattrs --xattrs-include="security.capability" -zcpf ../$(OUT_TGZ) *
+	cd root.x86_64; sudo bsdtar -zcpf ../$(OUT_TGZ) *
 	sudo chown `id -un` $(OUT_TGZ)
 
 rootfinal.tmp: glibc.tmp fakeroot.tmp locale.tmp
@@ -82,7 +82,7 @@ proc-tmp.tmp: root.x86_64.tmp
 
 root.x86_64.tmp: base.tar.gz
 	@echo -e '\e[1;31mExtracting rootfs...\e[m'
-	sudo tar --xattrs --xattrs-include="security.capability" -zxpf base.tar.gz
+	sudo bsdtar -zxpf base.tar.gz
 	sudo chmod +x root.x86_64
 	touch root.x86_64.tmp
 
