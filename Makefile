@@ -5,6 +5,7 @@ DLR_FLAGS=-L
 BASE_URL=http://mirrors.edge.kernel.org/archlinux/iso/2022.02.01/archlinux-bootstrap-2022.02.01-x86_64.tar.gz
 FRTCP_URL=https://github.com/yuk7/arch-prebuilt/releases/download/21082800/fakeroot-tcp-1.25.3-2-x86_64.pkg.tar.zst
 GLIBC_URL=https://github.com/yuk7/arch-prebuilt/releases/download/21082800/glibc-2.33-5-x86_64.pkg.tar.zst
+GLIBC_LINUX4_URL=https://repo.archlinuxcn.org/x86_64/glibc-linux4-2.33-5-x86_64.pkg.tar.zst
 PAC_PKGS=base less nano sudo vim curl
 
 all: $(OUT_TGZ)
@@ -15,7 +16,7 @@ $(OUT_TGZ): rootfinal.tmp
 	cd root.x86_64; sudo bsdtar -zcpf ../$(OUT_TGZ) *
 	sudo chown `id -un` $(OUT_TGZ)
 
-rootfinal.tmp: glibc.tmp fakeroot.tmp locale.tmp
+rootfinal.tmp: glibc.tmp fakeroot.tmp locale.tmp glibc-linux4.pkg.tar.zst
 	@echo -e '\e[1;31mCleaning files from rootfs...\e[m'
 	yes | sudo chroot root.x86_64 /usr/bin/pacman -Scc
 	sudo umount root.x86_64/sys
@@ -29,6 +30,7 @@ rootfinal.tmp: glibc.tmp fakeroot.tmp locale.tmp
 	sudo rm -rf `sudo find root.x86_64/tmp/ -type f`
 	@echo -e '\e[1;31mCopy Extra files to rootfs...\e[m'
 	sudo cp bash_profile root.x86_64/root/.bash_profile
+	sudo cp glibc-linux4.pkg.tar.zst root.x86_64/root/glibc-linux4.pkg.tar.zst
 	echo > rootfinal.tmp
 
 fakeroot.tmp: proc-tmp.tmp glibc.tmp fakeroot-tcp.pkg.tar.zst
@@ -90,6 +92,10 @@ glibc.pkg.tar.zst:
 	@echo -e '\e[1;31mDownloading glibc.pkg.tar.zst...\e[m'
 	$(DLR) $(DLR_FLAGS) $(GLIBC_URL) -o glibc.pkg.tar.zst
 
+glibc-linux4.pkg.tar.zst:
+	@echo -e '\e[1;31mDownloading glibc-linux4.pkg.tar.zst...\e[m'
+	$(DLR) $(DLR_FLAGS) $(GLIBC_LINUX4_URL) -o glibc-linux4.pkg.tar.zst
+
 fakeroot-tcp.pkg.tar.zst:
 	@echo -e '\e[1;31mDownloading fakeroot-tcp.pkg.tar.zst...\e[m'
 	$(DLR) $(DLR_FLAGS) $(FRTCP_URL) -o fakeroot-tcp.pkg.tar.zst
@@ -118,6 +124,7 @@ cleantmp:
 
 cleanpkg:
 	-rm glibc.pkg.tar.zst
+	-rm glibc-linux4.pkg.tar.zst
 	-rm fakeroot-tcp.pkg.tar.zst
 
 cleanbase:
