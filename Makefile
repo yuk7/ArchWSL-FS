@@ -31,6 +31,7 @@ rootfinal.tmp: glibc.tmp fakeroot.tmp locale.tmp glibc-linux4.pkg.tar.zst
 	@echo -e '\e[1;31mCopy Extra files to rootfs...\e[m'
 	sudo cp bash_profile root.x86_64/root/.bash_profile
 	sudo cp glibc-linux4.pkg.tar.zst root.x86_64/root/glibc-linux4.pkg.tar.zst
+	sudo cp wsl.conf root.x86_64/etc/wsl.conf
 	echo > rootfinal.tmp
 
 fakeroot.tmp: proc-tmp.tmp glibc.tmp fakeroot-tcp.pkg.tar.zst
