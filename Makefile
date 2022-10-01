@@ -2,7 +2,7 @@ OUT_TGZ=rootfs.tar.gz
 
 DLR=curl
 DLR_FLAGS=-L
-BASE_URL=http://mirrors.edge.kernel.org/archlinux/iso/2022.02.01/archlinux-bootstrap-2022.02.01-x86_64.tar.gz
+BASE_URL=http://mirrors.edge.kernel.org/archlinux/iso/2022.10.01/archlinux-bootstrap-x86_64.tar.gz
 FRTCP_URL=https://github.com/yuk7/arch-prebuilt/releases/download/21082800/fakeroot-tcp-1.25.3-2-x86_64.pkg.tar.zst
 GLIBC_URL=https://github.com/yuk7/arch-prebuilt/releases/download/22100100/glibc-2.36-2-x86_64.pkg.tar.zst
 GLIBC_LINUX4_URL=https://github.com/yuk7/arch-prebuilt/releases/download/22100100/lib32-glibc-2.36-2-x86_64.pkg.tar.zst
