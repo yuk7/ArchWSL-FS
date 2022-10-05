@@ -1,5 +1,8 @@
 # First run script for ArchWSL
 echo Initialize keyring
+rm -rf /etc/pacman.d/gnupg/
+rm -rf /root/.gnupg/
+clear
 pacman-key --init
 pacman-key --populate
 
@@ -16,7 +19,7 @@ if [[ $FSTYPE_LIST == *lxfs* || $FSTYPE_LIST == *wslfs* ]] ; then
     read -p "Would you like to install the glibc-linux4 package? (y/n):" -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
-        yes | pacman -U ~/glibc-linux4.pkg.tar.zst
+        yes | pacman -U /root/glibc-linux4.pkg.tar.zst
         echo
         echo glibc-linux4 is a 3rd party package and will not be updated automatically.
         echo You need to manage this package with AUR helpers or 3rd party repositories.
@@ -24,5 +27,5 @@ if [[ $FSTYPE_LIST == *lxfs* || $FSTYPE_LIST == *wslfs* ]] ; then
     fi
 fi
 
-rm ~/glibc-linux4.pkg.tar.zst
-rm ~/.bash_profile
+rm /root/glibc-linux4.pkg.tar.zst
+rm /root/.bash_profile
