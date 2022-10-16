@@ -1,10 +1,25 @@
 # First run script for ArchWSL
-echo Initialize keyring
-rm -rf /etc/pacman.d/gnupg/
-rm -rf /root/.gnupg/
+echo Initialize keyring...
+yes | pacman -U /root/archlinux-keyring.pkg.tar.zst
 clear
-pacman-key --init
-pacman-key --populate
+count=0
+result=1
+until [[ $count -eq 10 || $result -eq 0 ]]
+do
+    echo Initialize keyring...
+    rm -rf /etc/pacman.d/gnupg
+    rm -rf /root/.gnupg/
+    gpg --refresh-keys
+    clear
+    echo Initialize keyring...
+    sleep 1
+    pacman-key --init
+    sleep `expr 5 + $count`
+    pacman-key --populate
+    result=$?
+    count=`expr $count + 1`
+    clear
+done
 
 clear
 
@@ -27,5 +42,7 @@ if [[ $FSTYPE_LIST == *lxfs* || $FSTYPE_LIST == *wslfs* ]] ; then
     fi
 fi
 
+rm /root/archlinux-keyring.pkg.tar.zst
 rm /root/glibc-linux4.pkg.tar.zst
 rm /root/.bash_profile
+clear

@@ -6,7 +6,8 @@ BASE_URL=http://mirrors.edge.kernel.org/archlinux/iso/2022.10.01/archlinux-boots
 FRTCP_URL=https://github.com/yuk7/arch-prebuilt/releases/download/21082800/fakeroot-tcp-1.25.3-2-x86_64.pkg.tar.zst
 GLIBC_URL=https://github.com/yuk7/arch-prebuilt/releases/download/22100100/glibc-2.36-2-x86_64.pkg.tar.zst
 GLIBC_LINUX4_URL=https://github.com/yuk7/arch-prebuilt/releases/download/22100100/lib32-glibc-2.36-2-x86_64.pkg.tar.zst
-PAC_PKGS=base less nano sudo vim curl
+AL_KEYRING_URL=http://mirrors.edge.kernel.org/archlinux/core/os/x86_64/archlinux-keyring-20220927-1-any.pkg.tar.zst
+PAC_PKGS=archlinux-keyring base less nano sudo vim curl
 
 all: $(OUT_TGZ)
 
@@ -16,7 +17,7 @@ $(OUT_TGZ): rootfinal.tmp
 	cd root.x86_64; sudo bsdtar -zcpf ../$(OUT_TGZ) *
 	sudo chown `id -un` $(OUT_TGZ)
 
-rootfinal.tmp: glibc.tmp fakeroot.tmp locale.tmp glibc-linux4.pkg.tar.zst
+rootfinal.tmp: glibc.tmp fakeroot.tmp locale.tmp glibc-linux4.pkg.tar.zst archlinux-keyring.pkg.tar.zst
 	@echo -e '\e[1;31mCleaning files from rootfs...\e[m'
 	yes | sudo chroot root.x86_64 /usr/bin/pacman -Scc
 	sudo umount root.x86_64/sys
@@ -31,6 +32,7 @@ rootfinal.tmp: glibc.tmp fakeroot.tmp locale.tmp glibc-linux4.pkg.tar.zst
 	@echo -e '\e[1;31mCopy Extra files to rootfs...\e[m'
 	sudo cp bash_profile root.x86_64/root/.bash_profile
 	sudo cp glibc-linux4.pkg.tar.zst root.x86_64/root/glibc-linux4.pkg.tar.zst
+	sudo cp archlinux-keyring.pkg.tar.zst root.x86_64/root/archlinux-keyring.pkg.tar.zst
 	sudo cp wsl.conf root.x86_64/etc/wsl.conf
 	echo > rootfinal.tmp
 
@@ -89,6 +91,10 @@ root.x86_64.tmp: base.tar.gz
 	sudo chmod +x root.x86_64
 	touch root.x86_64.tmp
 
+archlinux-keyring.pkg.tar.zst:
+	@echo -e '\e[1;31mDownloading archlinux-keyring.pkg.tar.zst...\e[m'
+	$(DLR) $(DLR_FLAGS) $(GLIBC_URL) -o archlinux-keyring.pkg.tar.zst
+
 glibc.pkg.tar.zst:
 	@echo -e '\e[1;31mDownloading glibc.pkg.tar.zst...\e[m'
 	$(DLR) $(DLR_FLAGS) $(GLIBC_URL) -o glibc.pkg.tar.zst
@@ -127,6 +133,7 @@ cleanpkg:
 	-rm glibc.pkg.tar.zst
 	-rm glibc-linux4.pkg.tar.zst
 	-rm fakeroot-tcp.pkg.tar.zst
+	-rm archlinux-keyring.pkg.tar.zst
 
 cleanbase:
 	-rm base.tar.gz
