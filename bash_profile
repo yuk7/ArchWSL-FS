@@ -9,6 +9,7 @@ do
     echo Initialize keyring...
     rm -rf /etc/pacman.d/gnupg
     rm -rf /root/.gnupg/
+    pkill gpg-agent
     gpg --refresh-keys
     clear
     echo Initialize keyring...
