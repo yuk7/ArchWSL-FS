@@ -2,11 +2,11 @@ OUT_TGZ=rootfs.tar.gz
 
 DLR=curl
 DLR_FLAGS=-L
-BASE_URL=http://mirrors.edge.kernel.org/archlinux/iso/2023.12.01/archlinux-bootstrap-x86_64.tar.gz
+BASE_URL=https://mirrors.edge.kernel.org/archlinux/iso/2024.01.01/archlinux-bootstrap-x86_64.tar.gz
 FRTCP_URL=https://github.com/yuk7/arch-prebuilt/releases/download/23121300/fakeroot-tcp-1.32.2-1-x86_64.pkg.tar.zst
 GLIBC_URL=https://github.com/yuk7/arch-prebuilt/releases/download/23121300/glibc-2.38-7-x86_64.pkg.tar.zst
 GLIBC_LINUX4_URL=https://github.com/yuk7/arch-prebuilt/releases/download/23121300/lib32-glibc-2.38-7-x86_64.pkg.tar.zst
-AL_KEYRING_URL=http://mirrors.edge.kernel.org/archlinux/core/os/x86_64/archlinux-keyring-20231207-1-any.pkg.tar.zst
+AL_KEYRING_URL=https://mirrors.edge.kernel.org/archlinux/core/os/x86_64/archlinux-keyring-20231222-1-any.pkg.tar.zst
 PAC_PKGS=archlinux-keyring base less nano sudo vim curl
 
 all: $(OUT_TGZ)
