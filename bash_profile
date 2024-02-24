@@ -1,30 +1,6 @@
 # First run script for ArchWSL
-echo Initialize keyring...
-yes | pacman -U /root/archlinux-keyring.pkg.tar.zst
-clear
-count=0
-result=1
-until [[ $count -eq 10 || $result -eq 0 ]]
-do
-    echo Initialize keyring...
-    rm -rf /etc/pacman.d/gnupg
-    rm -rf /root/.gnupg/
-    pkill gpg-agent
-    gpg --refresh-keys
-    clear
-    echo Initialize keyring...
-    sleep 1
-    pacman-key --init
-    sleep `expr 5 + $count`
-    pacman-key --populate
-    result=$?
-    count=`expr $count + 1`
-    clear
-done
 
-clear
-
-# WSL1 check
+# Install glibc-linux4 if using WSL1
 FSTYPE_LIST=$(cat /proc/self/mounts | awk '{print $3}')
 if [[ $FSTYPE_LIST == *lxfs* || $FSTYPE_LIST == *wslfs* ]] ; then
     echo ----- WARNING -----
@@ -43,7 +19,6 @@ if [[ $FSTYPE_LIST == *lxfs* || $FSTYPE_LIST == *wslfs* ]] ; then
     fi
 fi
 
-rm /root/archlinux-keyring.pkg.tar.zst
 rm /root/glibc-linux4.pkg.tar.zst
 rm /root/.bash_profile
 clear
