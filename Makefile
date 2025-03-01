@@ -3,9 +3,6 @@ OUT_TGZ=rootfs.tar.gz
 DLR=curl
 DLR_FLAGS=-L
 BASE_URL=http://mirrors.edge.kernel.org/archlinux/iso/2025.02.01/archlinux-bootstrap-x86_64.tar.zst
-FRTCP_URL=https://github.com/yuk7/arch-prebuilt/releases/download/24042500/fakeroot-tcp-1.34-1-x86_64.pkg.tar.zst
-GLIBC_URL=https://github.com/yuk7/arch-prebuilt/releases/download/24042500/glibc-2.39-2-x86_64.pkg.tar.zst
-GLIBC_LINUX4_URL=https://github.com/yuk7/arch-prebuilt/releases/download/24042500/glibc-linux4-2.39-2-x86_64.pkg.tar.zst
 PAC_PKGS=archlinux-keyring base less nano sudo vim curl
 
 all: $(OUT_TGZ)
@@ -16,7 +13,7 @@ $(OUT_TGZ): rootfinal.tmp
 	cd root.x86_64; sudo bsdtar -zcpf ../$(OUT_TGZ) *
 	sudo chown `id -un` $(OUT_TGZ)
 
-rootfinal.tmp: glibc.tmp fakeroot.tmp locale.tmp glibc-linux4.pkg.tar.zst
+rootfinal.tmp: pacpkgs.tmp locale.tmp root.x86_64.tmp
 	@echo -e '\e[1;31mCleaning files from rootfs...\e[m'
 	yes | sudo chroot root.x86_64 /usr/bin/pacman -Scc
 	sudo umount root.x86_64/sys
@@ -31,24 +28,8 @@ rootfinal.tmp: glibc.tmp fakeroot.tmp locale.tmp glibc-linux4.pkg.tar.zst
 	sudo rm -rf `sudo find root.x86_64/root/ -type f`
 	sudo rm -rf `sudo find root.x86_64/tmp/ -type f`
 	@echo -e '\e[1;31mCopy Extra files to rootfs...\e[m'
-	sudo cp bash_profile root.x86_64/root/.bash_profile
-	sudo cp glibc-linux4.pkg.tar.zst root.x86_64/root/glibc-linux4.pkg.tar.zst
 	sudo cp wsl.conf root.x86_64/etc/wsl.conf
 	echo > rootfinal.tmp
-
-fakeroot.tmp: proc-tmp.tmp glibc.tmp fakeroot-tcp.pkg.tar.zst
-	@echo -e '\e[1;31mInstalling fakeroot-tcp...\e[m'
-	sudo cp -f fakeroot-tcp.pkg.tar.zst root.x86_64/root/fakeroot-tcp.pkg.tar.zst
-	yes | sudo chroot root.x86_64 /usr/bin/pacman -U /root/fakeroot-tcp.pkg.tar.zst
-	sudo rm -rf root.x86_64/root/fakeroot-tcp.pkg.tar.zst
-	touch fakeroot.tmp
-
-glibc.tmp: proc-tmp.tmp pacpkgs.tmp glibc.pkg.tar.zst
-	@echo -e '\e[1;31mInstalling glibc...\e[m'
-	sudo cp -f glibc.pkg.tar.zst root.x86_64/root/glibc.tar.zst
-	yes | sudo chroot root.x86_64 /usr/bin/pacman -U /root/glibc.tar.zst
-	sudo rm -rf root.x86_64/root/glibc.pkg.tar.zst
-	touch  glibc.tmp
 
 pacpkgs.tmp: proc-tmp.tmp resolv-tmp.tmp mirrorlist-tmp.tmp paccnf-tmp.tmp
 	@echo -e '\e[1;31mInstalling basic packages...\e[m'
@@ -91,29 +72,18 @@ root.x86_64.tmp: base.tar.zst
 	sudo chmod +x root.x86_64
 	touch root.x86_64.tmp
 
-glibc.pkg.tar.zst:
-	@echo -e '\e[1;31mDownloading glibc.pkg.tar.zst...\e[m'
-	$(DLR) $(DLR_FLAGS) $(GLIBC_URL) -o glibc.pkg.tar.zst
-
-glibc-linux4.pkg.tar.zst:
-	@echo -e '\e[1;31mDownloading glibc-linux4.pkg.tar.zst...\e[m'
-	$(DLR) $(DLR_FLAGS) $(GLIBC_LINUX4_URL) -o glibc-linux4.pkg.tar.zst
-
-fakeroot-tcp.pkg.tar.zst:
-	@echo -e '\e[1;31mDownloading fakeroot-tcp.pkg.tar.zst...\e[m'
-	$(DLR) $(DLR_FLAGS) $(FRTCP_URL) -o fakeroot-tcp.pkg.tar.zst
-
 base.tar.zst:
 	@echo -e '\e[1;31mDownloading base.tar.zst...\e[m'
 	$(DLR) $(DLR_FLAGS) $(BASE_URL) -o base.tar.zst
 
 clean: cleanall
 
-cleanall: cleanroot cleanproc cleantmp cleanpkg cleanbase
+cleanall: cleanroot cleanproc cleantmp cleanbase
 
 cleanroot: cleanproc
 	-sudo rm -rf root.x86_64
 	-rm root.x86_64.tmp
+	-rm pkglist.x86_64.txt
 	
 cleanproc:
 	-sudo umount root.x86_64/sys
@@ -124,11 +94,6 @@ cleanproc:
 
 cleantmp:
 	-rm *.tmp
-
-cleanpkg:
-	-rm glibc.pkg.tar.zst
-	-rm glibc-linux4.pkg.tar.zst
-	-rm fakeroot-tcp.pkg.tar.zst
 
 cleanbase:
 	-rm base.tar.zst
