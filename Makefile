@@ -2,7 +2,7 @@ OUT_TGZ=rootfs.tar.gz
 
 DLR=curl
 DLR_FLAGS=-L
-BASE_URL=http://mirrors.edge.kernel.org/archlinux/iso/2024.04.01/archlinux-bootstrap-x86_64.tar.gz
+BASE_URL=http://mirrors.edge.kernel.org/archlinux/iso/2025.02.01/archlinux-bootstrap-x86_64.tar.zst
 FRTCP_URL=https://github.com/yuk7/arch-prebuilt/releases/download/24042500/fakeroot-tcp-1.34-1-x86_64.pkg.tar.zst
 GLIBC_URL=https://github.com/yuk7/arch-prebuilt/releases/download/24042500/glibc-2.39-2-x86_64.pkg.tar.zst
 GLIBC_LINUX4_URL=https://github.com/yuk7/arch-prebuilt/releases/download/24042500/glibc-linux4-2.39-2-x86_64.pkg.tar.zst
@@ -85,9 +85,9 @@ proc-tmp.tmp: root.x86_64.tmp
 	sudo mount --bind /sys root.x86_64/sys
 	touch proc-tmp.tmp
 
-root.x86_64.tmp: base.tar.gz
+root.x86_64.tmp: base.tar.zst
 	@echo -e '\e[1;31mExtracting rootfs...\e[m'
-	sudo bsdtar -zxpf base.tar.gz
+	sudo bsdtar -xpf base.tar.zst
 	sudo chmod +x root.x86_64
 	touch root.x86_64.tmp
 
@@ -103,9 +103,9 @@ fakeroot-tcp.pkg.tar.zst:
 	@echo -e '\e[1;31mDownloading fakeroot-tcp.pkg.tar.zst...\e[m'
 	$(DLR) $(DLR_FLAGS) $(FRTCP_URL) -o fakeroot-tcp.pkg.tar.zst
 
-base.tar.gz:
-	@echo -e '\e[1;31mDownloading base.tar.gz...\e[m'
-	$(DLR) $(DLR_FLAGS) $(BASE_URL) -o base.tar.gz
+base.tar.zst:
+	@echo -e '\e[1;31mDownloading base.tar.zst...\e[m'
+	$(DLR) $(DLR_FLAGS) $(BASE_URL) -o base.tar.zst
 
 clean: cleanall
 
@@ -131,4 +131,4 @@ cleanpkg:
 	-rm fakeroot-tcp.pkg.tar.zst
 
 cleanbase:
-	-rm base.tar.gz
+	-rm base.tar.zst
