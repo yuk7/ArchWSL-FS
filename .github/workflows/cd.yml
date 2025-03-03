@@ -19,10 +19,12 @@ jobs:
       - name: Build
         run: |
           make
+          sha256sum rootfs.tar.gz > rootfs.tar.gz.sha256sum
       - name: Upload the release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             rootfs.tar.gz
+            rootfs.tar.gz.sha256sum
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
