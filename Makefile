@@ -2,7 +2,7 @@ OUT_TGZ=rootfs.tar.gz
 
 DLR=curl
 DLR_FLAGS=-L
-BASE_URL=http://mirrors.edge.kernel.org/archlinux/iso/2025.02.01/archlinux-bootstrap-x86_64.tar.zst
+BASE_URL=http://mirrors.edge.kernel.org/archlinux/iso/2026.04.01/archlinux-bootstrap-x86_64.tar.zst
 PAC_PKGS=archlinux-keyring base less nano sudo vim curl
 
 all: $(OUT_TGZ)
