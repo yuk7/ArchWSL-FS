@@ -29,6 +29,7 @@ rootfinal.tmp: pacpkgs.tmp locale.tmp root.x86_64.tmp
 	sudo rm -rf `sudo find root.x86_64/tmp/ -type f`
 	@echo -e '\e[1;31mCopy Extra files to rootfs...\e[m'
 	sudo cp wsl.conf root.x86_64/etc/wsl.conf
+	sudo install -Dm644 WSLInterop.conf root.x86_64/usr/lib/binfmt.d/WSLInterop.conf
 	echo > rootfinal.tmp
 
 pacpkgs.tmp: proc-tmp.tmp resolv-tmp.tmp mirrorlist-tmp.tmp paccnf-tmp.tmp
